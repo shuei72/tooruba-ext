@@ -1,0 +1,136 @@
+{
+  "name": "tooruba",
+  "displayName": "Tooruba",
+  "description": "Configurable command buttons in a bottom panel for VS Code.",
+  "version": "0.0.1",
+  "publisher": "shuei",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuei72/tooruba-ext.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shuei72/tooruba-ext/issues"
+  },
+  "homepage": "https://github.com/shuei72/tooruba-ext#readme",
+  "keywords": [
+    "commands",
+    "buttons",
+    "panel",
+    "bottom panel",
+    "productivity"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "toorubaPanel.openSettings",
+        "title": "Tooruba: Open Settings"
+      }
+    ],
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "toorubaPanelContainer",
+          "title": "Tooruba",
+          "icon": "media/container-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "toorubaPanelContainer": [
+        {
+          "id": "toorubaPanelView",
+          "name": "Tooruba",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "toorubaPanel.openSettings",
+          "when": "view == toorubaPanelView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Tooruba",
+      "properties": {
+        "toorubaPanel.items": {
+          "type": "array",
+          "default": [
+            {
+              "tooltip": "Explorer",
+              "command": "workbench.view.explorer",
+              "text": "Explorer"
+            },
+            {
+              "tooltip": "Search",
+              "command": "workbench.view.search",
+              "svg": "<svg viewBox=\"0 0 16 16\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"7\" cy=\"7\" r=\"4.25\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"/><path d=\"M10.5 10.5L14 14\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>"
+            }
+          ],
+          "markdownDescription": "Items shown in the command panel. Each item can render `text`, `svg`, or both, and dispatch any VS Code command.",
+          "items": {
+            "type": "object",
+            "required": [
+              "command"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "text"
+                ]
+              },
+              {
+                "required": [
+                  "svg"
+                ]
+              }
+            ],
+            "properties": {
+              "command": {
+                "type": "string",
+                "description": "VS Code command ID to execute when the item is clicked."
+              },
+              "arguments": {
+                "type": "array",
+                "description": "Arguments passed to the command."
+              },
+              "tooltip": {
+                "type": "string",
+                "description": "Tooltip text shown on hover."
+              },
+              "text": {
+                "type": "string",
+                "description": "Visible text label rendered inside the button. Required when `svg` is omitted."
+              },
+              "svg": {
+                "type": "string",
+                "description": "Inline SVG markup rendered inside the button. Required when `text` is omitted."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "typescript": "^5.6.3"
+  }
+}

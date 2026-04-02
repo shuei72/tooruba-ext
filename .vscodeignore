@@ -1,0 +1,6 @@
+src/**
+tsconfig.json
+**/*.map
+.vscode/**
+package-lock.json
+media/save-icon.svg
