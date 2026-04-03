@@ -431,6 +431,13 @@ function getSettingsHtml(webview: vscode.Webview): string {
       --secondary-hover: var(--vscode-button-secondaryHoverBackground, var(--surface));
       --focus: var(--vscode-focusBorder, var(--text));
       --danger: var(--vscode-errorForeground, #c72e0f);
+      --popup-bg: var(--vscode-quickInput-background, var(--surface));
+      --popup-border: var(--vscode-widget-border, var(--border));
+      --popup-hover: var(--vscode-list-hoverBackground, var(--surface-2));
+      --popup-active-bg: var(--vscode-list-activeSelectionBackground, var(--secondary-bg));
+      --popup-active-fg: var(--vscode-list-activeSelectionForeground, var(--text));
+      --popup-muted: var(--vscode-descriptionForeground, color-mix(in srgb, var(--text) 72%, var(--popup-bg)));
+      --popup-match: var(--vscode-list-highlightForeground, var(--vscode-textLink-foreground, #0b6cf0));
     }
 
     body {
@@ -645,8 +652,8 @@ function getSettingsHtml(webview: vscode.Webview): string {
       max-width: 520px;
       max-height: 220px;
       overflow: auto;
-      border: 1px solid var(--border);
-      background: var(--surface);
+      border: 1px solid var(--popup-border);
+      background: var(--popup-bg);
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
     }
 
@@ -658,10 +665,28 @@ function getSettingsHtml(webview: vscode.Webview): string {
       padding: 8px 10px;
       cursor: pointer;
       font-size: 12px;
-      border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--popup-border) 50%, transparent);
+      overflow: hidden;
+    }
+
+    .command-option:hover {
+      background: var(--popup-hover);
+    }
+
+    .command-option-title,
+    .command-option-id {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .command-option-title {
+      color: inherit;
+    }
+
+    .command-option-id {
+      margin-top: 2px;
+      color: var(--popup-muted);
     }
 
     .command-option:last-child {
@@ -669,12 +694,16 @@ function getSettingsHtml(webview: vscode.Webview): string {
     }
 
     .command-option.active {
-      background: var(--vscode-list-activeSelectionBackground, var(--secondary-bg));
-      color: var(--vscode-list-activeSelectionForeground, var(--text));
+      background: var(--popup-active-bg);
+      color: var(--popup-active-fg);
+    }
+
+    .command-option.active .command-option-id {
+      color: color-mix(in srgb, var(--popup-active-fg) 78%, transparent);
     }
 
     .command-match {
-      color: var(--vscode-textLink-foreground, #4da3ff);
+      color: var(--popup-match);
       font-weight: 700;
     }
   </style>
@@ -847,7 +876,7 @@ function getSettingsHtml(webview: vscode.Webview): string {
       }
 
       commandPopup.innerHTML = filteredCommands
-        .map((entry, index) => \`<div class="command-option \${index === activeCommandIndex ? 'active' : ''}" data-command="\${escapeHtml(entry.command)}"><div>\${highlightCommand(entry.title || entry.command, entry.positions)}</div><div style="opacity:.72">\${escapeHtml(entry.command)}</div></div>\`)
+        .map((entry, index) => \`<div class="command-option \${index === activeCommandIndex ? 'active' : ''}" data-command="\${escapeHtml(entry.command)}"><div class="command-option-title">\${highlightCommand(entry.title || entry.command, entry.positions)}</div><div class="command-option-id">\${escapeHtml(entry.command)}</div></div>\`)
         .join('');
 
       const rect = activeCommandInput.getBoundingClientRect();
