@@ -1,0 +1,22 @@
+<svg width="256" height="256" viewBox="8 8 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tooruba icon idea panel buttons">
+  <defs>
+    <linearGradient id="bg" x1="10" y1="10" x2="246" y2="246" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#20344A"/>
+      <stop offset="1" stop-color="#0D1722"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="24" y1="156" x2="232" y2="234" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#233C55"/>
+      <stop offset="1" stop-color="#172939"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="44" fill="url(#bg)"/>
+  <rect x="24" y="28" width="208" height="132" rx="26" fill="#101A24" opacity="0.55"/>
+  <rect x="24" y="166" width="208" height="62" rx="22" fill="url(#panel)" stroke="#86AED4" stroke-width="5"/>
+  <rect x="42" y="181" width="34" height="30" rx="9" fill="#EAF3FC"/>
+  <rect x="88" y="181" width="50" height="30" rx="9" fill="#CFE2F5"/>
+  <rect x="150" y="181" width="34" height="30" rx="9" fill="#EAF3FC"/>
+  <rect x="196" y="181" width="22" height="30" rx="9" fill="#CFE2F5"/>
+  <path d="M54 66h148" stroke="#54718E" stroke-width="10" stroke-linecap="round"/>
+  <path d="M54 102h106" stroke="#54718E" stroke-width="10" stroke-linecap="round"/>
+  <path d="M54 138h132" stroke="#54718E" stroke-width="10" stroke-linecap="round"/>
+</svg>
