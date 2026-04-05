@@ -1,0 +1,22 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tooruba icon idea grid launcher">
+  <defs>
+    <linearGradient id="bg2" x1="24" y1="16" x2="232" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#182735"/>
+      <stop offset="1" stop-color="#0A121A"/>
+    </linearGradient>
+    <linearGradient id="tile" x1="52" y1="52" x2="204" y2="204" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#26435E"/>
+      <stop offset="1" stop-color="#193145"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="224" height="224" rx="48" fill="url(#bg2)"/>
+  <rect x="44" y="44" width="70" height="70" rx="18" fill="url(#tile)" stroke="#8AB3D9" stroke-width="5"/>
+  <rect x="126" y="44" width="86" height="34" rx="14" fill="#DCEAF8"/>
+  <rect x="126" y="86" width="86" height="28" rx="12" fill="#EAF3FC"/>
+  <rect x="44" y="126" width="168" height="44" rx="16" fill="#20384E" stroke="#8AB3D9" stroke-width="5"/>
+  <rect x="44" y="182" width="52" height="30" rx="12" fill="#EAF3FC"/>
+  <rect x="108" y="182" width="52" height="30" rx="12" fill="#DCEAF8"/>
+  <rect x="172" y="182" width="40" height="30" rx="12" fill="#EAF3FC"/>
+  <path d="M66 79h28" stroke="#DCEAF8" stroke-width="10" stroke-linecap="round"/>
+  <path d="M79 66v28" stroke="#DCEAF8" stroke-width="10" stroke-linecap="round"/>
+</svg>

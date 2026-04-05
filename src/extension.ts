@@ -1,29 +1,18 @@
 import * as vscode from 'vscode';
 
-type PanelItem = {
-  id?: string;
-  command: string;
-  arguments?: unknown[];
-  tooltip?: string;
-  text?: string;
-  svg?: string;
-};
+import { getKnownCommands, getPanelItems, isPanelItem, savePanelItems } from './panelItems';
+import { CommandSuggestion, WebviewMessage } from './types';
 
-type WebviewMessage =
-  | { type: 'run-command'; id: string }
-  | { type: 'save-items'; items: PanelItem[] }
-  | { type: 'request-items' }
-  | { type: 'request-commands' };
-
-type CommandSuggestion = {
-  command: string;
-  title?: string;
-};
-
+/**
+ * Hosts the bottom panel webview that renders the configured command buttons.
+ */
 class PanelViewProvider implements vscode.WebviewViewProvider {
   static readonly viewType = 'toorubaPanelView';
   private currentView?: vscode.WebviewView;
 
+  /**
+   * Configures the panel webview and handles button click messages.
+   */
   resolveWebviewView(webviewView: vscode.WebviewView): void {
     this.currentView = webviewView;
     webviewView.webview.options = { enableScripts: true };
@@ -50,6 +39,9 @@ class PanelViewProvider implements vscode.WebviewViewProvider {
     this.render();
   }
 
+  /**
+   * Rebuilds the panel HTML from the latest settings.
+   */
   render(): void {
     if (!this.currentView) {
       return;
@@ -59,11 +51,17 @@ class PanelViewProvider implements vscode.WebviewViewProvider {
   }
 }
 
+/**
+ * Hosts the settings editor webview used to configure panel items visually.
+ */
 class SettingsPanel {
   private static readonly viewType = 'toorubaPanel.settings';
   private panel?: vscode.WebviewPanel;
   private commandCache?: CommandSuggestion[];
 
+  /**
+   * Opens or reveals the settings webview panel.
+   */
   show(extensionUri: vscode.Uri): void {
     if (this.panel) {
       this.panel.reveal(vscode.ViewColumn.Active, false);
@@ -107,6 +105,9 @@ class SettingsPanel {
     this.render();
   }
 
+  /**
+   * Rebuilds the settings panel HTML.
+   */
   render(): void {
     if (!this.panel) {
       return;
@@ -115,6 +116,9 @@ class SettingsPanel {
     this.panel.webview.html = getSettingsHtml(this.panel.webview);
   }
 
+  /**
+   * Posts the latest configured items to the settings webview.
+   */
   async postItems(): Promise<void> {
     if (!this.panel) {
       return;
@@ -126,6 +130,9 @@ class SettingsPanel {
     });
   }
 
+  /**
+   * Posts the cached command catalog, loading it once on demand.
+   */
   async postCommands(): Promise<void> {
     if (!this.panel) {
       return;
@@ -142,6 +149,9 @@ class SettingsPanel {
   }
 }
 
+/**
+ * Activates Tooruba and wires the panel view to the settings editor.
+ */
 export function activate(context: vscode.ExtensionContext): void {
   const provider = new PanelViewProvider();
   const settingsPanel = new SettingsPanel();
@@ -158,92 +168,13 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 }
 
+/**
+ * Exposes a deactivate hook for VS Code.
+ */
 export function deactivate(): void {}
-
-function getPanelItems(): PanelItem[] {
-  const config = vscode.workspace.getConfiguration('toorubaPanel');
-  const inspect = config.inspect<unknown[]>('items');
-  const items = inspect?.globalValue ?? config.get<unknown[]>('items', []);
-
-  return items.flatMap((item) => {
-    if (!isPanelItem(item)) {
-      return [];
-    }
-
-    return [withComputedId(item)];
-  });
-}
-
-async function savePanelItems(items: PanelItem[]): Promise<void> {
-  const config = vscode.workspace.getConfiguration('toorubaPanel');
-  await config.update('items', items.map(stripInternalId), vscode.ConfigurationTarget.Global);
-}
-
-function isPanelItem(value: unknown): value is PanelItem {
-  if (!value || typeof value !== 'object') {
-    return false;
-  }
-
-  const item = value as Record<string, unknown>;
-  return typeof item.command === 'string';
-}
-
-function withComputedId(item: PanelItem): PanelItem {
-  const seed = [item.command, item.text ?? '', item.tooltip ?? '', item.svg ?? ''].join('|');
-  let hash = 0;
-
-  for (let index = 0; index < seed.length; index += 1) {
-    hash = (hash * 31 + seed.charCodeAt(index)) >>> 0;
-  }
-
-  return {
-    ...item,
-    id: `item-${hash.toString(16)}`
-  };
-}
-
-function stripInternalId(item: PanelItem): PanelItem {
-  const { id: _id, ...rest } = item;
-  return rest;
-}
-
-async function getKnownCommands(): Promise<CommandSuggestion[]> {
-  const registered = await vscode.commands.getCommands(true);
-  const contributed = vscode.extensions.all.flatMap((extension) => {
-    const packageJson = extension.packageJSON as {
-      contributes?: {
-        commands?: Array<{ command?: unknown; title?: unknown }>;
-      };
-    };
-
-    return (packageJson.contributes?.commands ?? []).flatMap((entry) => {
-      return typeof entry.command === 'string'
-        ? [{
-            command: entry.command,
-            title: typeof entry.title === 'string' ? entry.title : undefined
-          }]
-        : [];
-    });
-  });
-
-  const byCommand = new Map<string, CommandSuggestion>();
-
-  for (const entry of contributed) {
-    byCommand.set(entry.command, entry);
-  }
-
-  for (const command of registered) {
-    const existing = byCommand.get(command);
-    byCommand.set(command, existing ?? { command });
-  }
-
-  return [...byCommand.values()].sort((left, right) => {
-    const leftLabel = left.title ?? left.command;
-    const rightLabel = right.title ?? right.command;
-    return leftLabel.localeCompare(rightLabel) || left.command.localeCompare(right.command);
-  });
-}
-
+/**
+ * Builds the bottom panel webview HTML for the configured command buttons.
+ */
 function getPanelHtml(webview: vscode.Webview): string {
   const nonce = getNonce();
   const items = JSON.stringify(getPanelItems());
@@ -402,6 +333,9 @@ function getPanelHtml(webview: vscode.Webview): string {
 </html>`;
 }
 
+/**
+ * Builds the settings editor webview HTML used to edit panel items visually.
+ */
 function getSettingsHtml(webview: vscode.Webview): string {
   const nonce = getNonce();
 
@@ -962,7 +896,7 @@ function getSettingsHtml(webview: vscode.Webview): string {
         arguments: parsedArguments,
         tooltip: tooltip || undefined,
         text: text || undefined,
-        svg: svg || undefined
+        svg: svg ? normalizeSvgQuotes(svg) : undefined
       };
     }
 
@@ -979,6 +913,10 @@ function getSettingsHtml(webview: vscode.Webview): string {
       } catch {
         return false;
       }
+    }
+
+    function normalizeSvgQuotes(svg) {
+      return svg.replaceAll(/="([^"]*)"/g, "='$1'");
     }
 
     function updateItemPreview(section) {
@@ -1207,6 +1145,9 @@ function getSettingsHtml(webview: vscode.Webview): string {
 </html>`;
 }
 
+/**
+ * Creates a CSP-safe nonce for inline webview scripts.
+ */
 function getNonce(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let nonce = '';

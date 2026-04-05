@@ -1,37 +1,37 @@
 ﻿# Tooruba
 
-Tooruba is a VS Code extension that places arbitrary commands on a panel as buttons.  
-Buttons can use text labels, SVG icons, or both.
+Toorubaは、任意のVS Codeコマンドをパネルにボタンとして並べられる拡張機能です。  
+ボタンには、テキストやSVGアイコンを割り当てることができます。
 
-## Commands
+## コマンド
+<!-- コマンド行の最後には空白を2ついれること -->
 
 `Tooruba: Open Settings`  
-Opens the settings view for editing Tooruba buttons.
+Toorubaのボタンを編集する設定画面を開きます。
 
-## Features
+## 特徴
+- パネルに`Tooruba`を追加します。
+- パネルに任意のコマンドを割り当てたボタンを表示します。
+- 各ボタンに任意のVS CodeコマンドIDと引数を設定できます。
+- ボタンはテキスト、SVG、またはその両方で表示できます。
+- 設定画面からボタンの追加、削除、並べ替えを行えます。
 
-- Adds `Tooruba` to the panel.
-- Shows buttons mapped to arbitrary commands.
-- Supports command IDs and arguments for each button.
-- Supports text, SVG, or both on each button.
-- Supports adding, removing, and reordering buttons from the settings view.
-
-## Settings
+## 設定
 
 `toorubaPanel.items`  
-- Array of buttons to display
+- 表示するボタンの配列
 
-Each item can include the following properties:
+各要素には次のプロパティを指定できます。
 
-| Property | Description |
+| 要素 | 説明 |
 | --- | --- |
-| `command` | VS Code command ID to run |
-| `arguments` | Argument array passed to the command |
-| `tooltip` | Hover text shown on the button |
-| `text` | Text label shown on the button (`svg` is required when omitted) |
-| `svg` | Inline SVG shown on the button (`text` is required when omitted) |
+| `command` | 実行するVS CodeコマンドID |
+| `arguments` | コマンドへ渡す引数配列 |
+| `tooltip` | ボタンにマウスオーバーしたときの説明文 |
+| `text` | ボタンに表示する文字列(`svg`がない場合は必須) |
+| `svg` | ボタンに表示するインラインSVG(`text`がない場合は必須) |
 
-### Example
+### 設定例
 
 ```json
 {
@@ -88,7 +88,7 @@ Each item can include the following properties:
 }
 ```
 
-## Development
+## 開発用
 
 ### PowerShell
 
@@ -106,10 +106,10 @@ npm run compile
 npm run package
 ```
 
-## Other
+## その他
 
-- This extension was created with Codex.
+- この拡張機能の作成にはCodexを利用しています。
 
-## License
+## ライセンス
 
 MIT License

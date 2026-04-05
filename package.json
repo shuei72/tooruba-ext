@@ -1,16 +1,18 @@
 {
-  "name": "tooruba",
+  "name": "rumo-tooruba",
   "displayName": "Tooruba",
   "description": "Configurable command buttons in a bottom panel for VS Code.",
   "version": "0.0.1",
   "publisher": "shuei",
   "license": "MIT",
+  "icon": "media/icon.png",
   "engines": {
     "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
   ],
+  "markdown": "github",
   "repository": {
     "type": "git",
     "url": "https://github.com/shuei72/tooruba-ext.git"
@@ -26,6 +28,14 @@
     "bottom panel",
     "productivity"
   ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": true
+    }
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
@@ -65,18 +75,61 @@
     "configuration": {
       "title": "Tooruba",
       "properties": {
+        "toorubaPanel.debugDefault": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Uses the built-in default button set for debugging when set to `true`."
+        },
         "toorubaPanel.items": {
           "type": "array",
           "default": [
             {
-              "tooltip": "Explorer",
-              "command": "workbench.view.explorer",
-              "text": "Explorer"
+              "tooltip": "New",
+              "command": "workbench.action.files.newUntitledFile",
+              "svg": "<svg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><path d='M4 1.75h5.1L12.25 4.9V14.25H4z' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/><path d='M9 1.75v3.5h3.25' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/><path d='M10.75 2.4l.55-1.15M12.6 4.25l1.15-.55M12.65 2.8l.95-.95' stroke='currentColor' stroke-width='1.25' stroke-linecap='round'/></svg>"
+            },
+            {
+              "tooltip": "Open",
+              "command": "workbench.action.files.openFile",
+              "svg": "<svg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><path d='M3.75 1.75h5.1L12 4.9v9.35H3.75z' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/><path d='M8.75 1.75v3.5H12' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/><path d='M5.5 9h4.75M8.25 6.75l2.25 2.25-2.25 2.25' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>"
+            },
+            {
+              "tooltip": "Save",
+              "command": "workbench.action.files.save",
+              "svg": "<svg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><path d='M2.75 1.75h8.5l2 2v10.5h-10.5z' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/><path d='M5 1.75v4h5v-4M5 12.25h6' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/></svg>"
+            },
+            {
+              "tooltip": "Sidebar",
+              "command": "workbench.action.toggleSidebarVisibility",
+              "text": "Sidebar"
+            },
+            {
+              "tooltip": "Panel",
+              "command": "workbench.action.togglePanel",
+              "text": "Panel"
+            },
+            {
+              "tooltip": "Extension",
+              "command": "workbench.view.extensions",
+              "text": "Extension"
             },
             {
               "tooltip": "Search",
               "command": "workbench.view.search",
-              "svg": "<svg viewBox=\"0 0 16 16\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"7\" cy=\"7\" r=\"4.25\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"/><path d=\"M10.5 10.5L14 14\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>"
+              "svg": "<svg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><circle cx='7' cy='7' r='4.25' fill='none' stroke='currentColor' stroke-width='1.5'/><path d='M10.5 10.5L14 14' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'/></svg>"
+            },
+            {
+              "tooltip": "ToDo",
+              "command": "workbench.action.findInFiles",
+              "arguments": [
+                {
+                  "query": "TODO:|ToDo:",
+                  "isRegex": true,
+                  "triggerSearch": true
+                }
+              ],
+              "text": "Search Todo",
+              "svg": "<svg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><circle cx='7' cy='7' r='4.25' fill='none' stroke='currentColor' stroke-width='1.5'/><path d='M10.5 10.5L14 14' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'/></svg>"
             }
           ],
           "markdownDescription": "Items shown in the command panel. Each item can render `text`, `svg`, or both, and dispatch any VS Code command.",
@@ -127,9 +180,11 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "package": "npx @vscode/vsce package"
   },
   "devDependencies": {
+    "@vscode/vsce": "^3.7.1",
     "@types/vscode": "^1.74.0",
     "typescript": "^5.6.3"
   }
