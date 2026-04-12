@@ -1,14 +1,18 @@
-﻿# Tooruba
+﻿<p align="center">
+  <img src="media/icon.png" alt="Tooruba icon" width="128" />
+</p>
+
+# Tooruba
 
 Tooruba is a VS Code extension that places arbitrary commands on a panel as buttons.  
 Buttons can use text labels, SVG icons, or both.
 
-## Commands
+## ✨ Commands
 
 `Tooruba: Open Settings`  
 Opens the settings view for editing Tooruba buttons.
 
-## Features
+## 🧭 Features
 
 - Adds `Tooruba` to the panel.
 - Shows buttons mapped to arbitrary commands.
@@ -16,7 +20,7 @@ Opens the settings view for editing Tooruba buttons.
 - Supports text, SVG, or both on each button.
 - Supports adding, removing, and reordering buttons from the settings view.
 
-## Settings
+## ⚙️ Settings
 
 `toorubaPanel.items`  
 - Array of buttons to display
