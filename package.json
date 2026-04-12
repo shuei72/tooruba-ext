@@ -6,6 +6,10 @@
   "publisher": "shuei",
   "license": "MIT",
   "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#243041",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -26,7 +30,9 @@
     "buttons",
     "panel",
     "bottom panel",
-    "productivity"
+    "productivity",
+    "launcher",
+    "toolbar"
   ],
   "capabilities": {
     "untrustedWorkspaces": {
